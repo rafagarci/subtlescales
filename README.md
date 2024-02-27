@@ -16,7 +16,7 @@ optional arguments:
   -b MAX_BYTES, --max-bytes MAX_BYTES
                         maximum number of bytes to process at once, defaults to 1024
   -e COMMAND, --execute COMMAND
-                        execute a command locally and transmit over an encrypted channel, requires -l
+                        execute a command locally and transmit over an encrypted channel
   -l, --listen          listen for incoming connections
   -p PORT, --port PORT  port to connect to or listen from, defaults to 8443
   -r, --read-only       read-only mode, only receive incoming data, invalid when -e is specified
@@ -51,13 +51,13 @@ cat sent_file | python3 subtlescales.py -wa SERVER_IP_ADDRESS
 #### 2.2.1 Server
 
 ```{bash}
-python3 subtlescales.py -b1 -le "/usr/bin/bash"
+python3 subtlescales.py -l -b1
 ```
 
 #### 2.2.2 Client
 
 ```{bash}
-python3 subtlescales.py -b1 -a SERVER_IP_ADDRESS
+python3 subtlescales.py -b1 -e "/usr/bin/bash" -a SERVER_IP_ADDRESS
 ```
 
 **Note**: Consider running the following in order to have a more natural shell experience.
