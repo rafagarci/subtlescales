@@ -149,7 +149,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='subtlescales.py', description='A simple and encrypted version of Netcat written in vanilla Python.')
     parser.add_argument('-a', '--address', help="listener's IP address, ignored when -l is specified", metavar='ADDRESS')
     parser.add_argument('-b', '--max-bytes', type=int, help='maximum number of bytes to process at once, defaults to 1024', default=1024)
-    parser.add_argument('-e', '--execute', type=str, help='execute a command locally and transmit over an encrypted channel, requires -l', metavar='COMMAND')
+    parser.add_argument('-e', '--execute', type=str, help='execute a command locally and transmit over an encrypted channel', metavar='COMMAND')
     parser.add_argument('-l', '--listen', help='listen for incoming connections', action='store_true', default=False)
     parser.add_argument('-p', '--port', type=int, help='port to connect to or listen from, defaults to 8443', metavar='PORT', default=8443)
     parser.add_argument('-r', '--read-only', help="read-only mode, only receive incoming data, invalid when -e is specified", action='store_true', default=False)
@@ -157,8 +157,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Invalid cases
-    if args.execute and not args.listen:
-        raise Exception('execute mode requires the -l option')
     if not args.listen and not args.address:
         raise Exception("listener's address not provided")
     if args.write_only and args.read_only:
@@ -189,7 +187,8 @@ if __name__ == '__main__':
             # Rename main socket
             main_socket = conn if args.listen else ssock
 
-            if args.execute and args.listen:
+            # Run selected mode
+            if args.execute:
                 execute_command_mode(main_socket, args.execute, args.write_only, args.max_bytes)
             else:
                 regular_mode(main_socket, args.read_only, args.write_only, args.max_bytes)
